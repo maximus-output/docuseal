@@ -1,1 +1,19 @@
-<%= render 'submissions/bulk_send_placeholder' %>
+<%= form_with url: template_submissions_bulk_index_path(template), method: :post,
+      html: { enctype: 'multipart/form-data', class: 'space-y-4', data: { turbo_frame: :_top } } do |f| %>
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text font-medium"><%= t('upload_excel_or_csv_file') %></span>
+    </label>
+    <%= f.file_field :spreadsheet, accept: '.xlsx,.csv',
+          class: 'file-input file-input-bordered w-full', required: true %>
+    <label class="label">
+      <span class="label-text-alt text-xs text-gray-500">
+        <%= t('first_row_must_be_headers_with_email_column') %>
+      </span>
+    </label>
+  </div>
+  <div class="form-control">
+    <%= f.submit button_title(title: t('send'), disabled_with: t('sending')),
+          class: 'base-button w-full' %>
+  </div>
+<% end %>

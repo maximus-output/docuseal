@@ -104,6 +104,7 @@ Rails.application.routes.draw do
     resources :restore, only: %i[create], controller: 'templates_restore'
     resources :archived, only: %i[index], controller: 'templates_archived_submissions'
     resources :submissions, only: %i[new create]
+    resources :submissions_bulk, only: %i[create], path: 'submissions/bulk'
     resource :folder, only: %i[edit update], controller: 'templates_folders'
     resource :preview, only: %i[show], controller: 'templates_preview'
     resource :form, only: %i[show], controller: 'templates_form_preview'
