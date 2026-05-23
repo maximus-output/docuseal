@@ -1,39 +1,29 @@
 # frozen_string_literal: true
 
 class EmbedScriptsController < ActionController::Metal
-  DUMMY_SCRIPT = <<~JAVASCRIPT.freeze
-    const DummyBuilder = class extends HTMLElement {
-      connectedCallback() {
-        this.innerHTML = `
-          <div style="text-align: center; padding: 20px; font-family: Arial, sans-serif;">
-            <h2>Upgrade to Pro</h2>
-            <p>Unlock embedded components by upgrading to Pro</p>
-            <div style="margin-top: 40px;">
-              <a href="#{Docuseal::CONSOLE_URL}/on_premises" target="_blank" style="padding: 15px 25px; background-color: #222; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; cursor: pointer;">
-                Learn More
-              </a>
-            </div>
-          </div>
-        `;
-      }
-    };
-
-    const DummyForm = class extends DummyBuilder {};
-
-    if (!window.customElements.get('docuseal-builder')) {
-      window.customElements.define('docuseal-builder', DummyBuilder);
-    }
-
-    if (!window.customElements.get('docuseal-form')) {
-      window.customElements.define('docuseal-form', DummyForm);
-    }
-  JAVASCRIPT
-
   def show
-    headers['Content-Type'] = 'application/javascript'
+    filename = params[:filename]
+    manifest_path = Rails.public_path.join('packs', 'manifest.json')
 
-    self.response_body = DUMMY_SCRIPT
+    if manifest_path.exist?
+      manifest = JSON.parse(manifest_path.read)
+      pack_key = manifest.keys.find { |k| k == "js/#{filename}" || k.start_with?("js/#{filename.sub(/\.js$/, '')}-") }
 
-    self.status = 200
+      if pack_key
+        relative_path = pack_key.sub(%r{^js/}, '')
+        js_path = Rails.public_path.join('packs', relative_path)
+
+        if js_path.exist?
+          headers['Content-Type'] = 'application/javascript'
+          headers['Cache-Control'] = 'public, max-age=86400'
+          self.response_body = js_path.read
+          self.status = 200
+          return
+        end
+      end
+    end
+
+    self.response_body = ''
+    self.status = 404
   end
 end
