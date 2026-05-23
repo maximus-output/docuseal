@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html data-theme="docuseal" lang="<%= I18n.locale %>">
   <head>
+    <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('ds-theme') || 'docuseal')</script>
     <%= render 'layouts/head_tags' %>
     <% if Docuseal.enable_pwa? %>
       <link rel="manifest" href="/manifest.json">

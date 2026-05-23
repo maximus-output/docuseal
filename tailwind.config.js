@@ -19,6 +19,22 @@ module.exports = {
           '--tab-border': '2px',
           '--tab-radius': '.5rem'
         }
+      },
+      {
+        'docuseal-dark': {
+          'color-scheme': 'dark',
+          primary: '#9333ea',
+          secondary: '#ef9fbc',
+          accent: '#eeaf3a',
+          neutral: '#e4e0e1',
+          'base-100': '#1e1a2e',
+          'base-200': '#16131f',
+          'base-300': '#100e17',
+          'base-content': '#e8e4f0',
+          '--rounded-btn': '1.9rem',
+          '--tab-border': '2px',
+          '--tab-radius': '.5rem'
+        }
       }
     ]
   }

@@ -20,6 +20,10 @@
       <% else %>
         <div class="flex items-center justify-center space-x-4 mr-1">
           <%= render 'shared/navbar_buttons' %>
+          <button onclick="(function(){var t=localStorage.getItem('ds-theme')==='docuseal-dark'?'docuseal':'docuseal-dark';localStorage.setItem('ds-theme',t);document.documentElement.setAttribute('data-theme',t)})()" class="opacity-60 hover:opacity-100 transition-opacity" title="Toggle dark mode" aria-label="Toggle dark mode">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 block [html[data-theme=docuseal-dark]_&]:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden [html[data-theme=docuseal-dark]_&]:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/></svg>
+          </button>
           <%= link_to t('settings'), settings_profile_index_path, class: 'hidden md:inline-flex font-medium text-lg', id: 'account_settings_button' %>
         </div>
       <% end %>
