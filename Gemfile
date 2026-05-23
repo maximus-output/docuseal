@@ -41,6 +41,7 @@ gem 'ruby-vips'
 gem 'rubyXL', require: false
 gem 'shakapacker'
 gem 'sidekiq'
+gem 'sidekiq-cron'
 gem 'sqlite3', require: false
 gem 'strip_attributes'
 gem 'trilogy', require: false
