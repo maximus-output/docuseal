@@ -55,6 +55,8 @@ class Account < ApplicationRecord
   attribute :timezone, :string, default: 'UTC'
   attribute :locale, :string, default: 'en-US'
 
+  has_one_attached :logo
+
   scope :active, -> { where(archived_at: nil) }
 
   def testing?
