@@ -1,3 +1,13 @@
-<div class="form-control">
-  <%= render 'sms_settings/placeholder' %>
+<div class="form-control mt-2">
+  <% sms_configured = EncryptedConfig.exists?(account: current_account, key: 'sms_configs') %>
+  <% if sms_configured %>
+    <label class="flex items-center gap-2 cursor-pointer">
+      <%= check_box_tag 'send_sms', '1', false, class: 'checkbox' %>
+      <span><%= t('send_sms') %></span>
+    </label>
+  <% else %>
+    <div class="text-sm text-gray-500">
+      <%= link_to t('configure_sms'), settings_sms_index_path, class: 'link' %>
+    </div>
+  <% end %>
 </div>

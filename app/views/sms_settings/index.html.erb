@@ -2,7 +2,32 @@
   <%= render 'shared/settings_nav' %>
   <div class="flex-grow max-w-xl mx-auto">
     <h1 class="text-4xl font-bold mb-4">SMS</h1>
-    <%= render 'placeholder' %>
+    <% sms_config = @encrypted_config.value || {} %>
+    <%= form_with url: settings_sms_index_path, method: :post, html: { class: 'space-y-4' } do |f| %>
+      <div class="form-control">
+        <%= label_tag :provider, 'SMS Provider', class: 'label font-medium' %>
+        <%= select_tag :provider, options_for_select([['Twilio', 'twilio'], ['Vonage', 'vonage']], sms_config['provider']),
+              class: 'base-select', include_blank: 'Select provider' %>
+      </div>
+      <div class="form-control">
+        <%= label_tag :account_sid, 'Account SID / API Key', class: 'label font-medium' %>
+        <%= text_field_tag :account_sid, sms_config['account_sid'],
+              class: 'base-input w-full', placeholder: 'ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' %>
+      </div>
+      <div class="form-control">
+        <%= label_tag :auth_token, 'Auth Token / API Secret', class: 'label font-medium' %>
+        <%= password_field_tag :auth_token, '',
+              class: 'base-input w-full', placeholder: '••••••••' %>
+      </div>
+      <div class="form-control">
+        <%= label_tag :from_number, 'From Phone Number', class: 'label font-medium' %>
+        <%= text_field_tag :from_number, sms_config['from_number'],
+              class: 'base-input w-full', placeholder: '+1234567890' %>
+      </div>
+      <div>
+        <%= submit_tag t('save'), class: 'base-button' %>
+      </div>
+    <% end %>
   </div>
   <div class="w-0 md:w-52"></div>
 </div>

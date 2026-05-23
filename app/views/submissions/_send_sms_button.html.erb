@@ -1,5 +1,15 @@
 <div class="mt-2 mb-1">
-  <div class="tooltip w-full" data-tip="<%= t('unlock_with_docuseal_pro') %>">
-    <%= link_to submitter.sent_at? ? t('re_send_sms') : t('send_sms'), Docuseal.multitenant? ? console_redirect_index_path(redir: "#{Docuseal::CONSOLE_URL}/plans") : "#{Docuseal::CLOUD_URL}/sign_up?#{{ redir: "#{Docuseal::CONSOLE_URL}/on_premises" }.to_query}", class: 'btn btn-sm btn-primary text-gray-400 w-full' %>
-  </div>
+  <% sms_configured = EncryptedConfig.exists?(account: current_account, key: 'sms_configs') %>
+  <% if sms_configured %>
+    <%= button_to submitter.sent_at? ? t('re_send_sms') : t('send_sms'),
+          submitter_path(submitter),
+          method: :patch,
+          params: { submitter: { phone: submitter.phone }, send_sms: '1' },
+          class: 'btn btn-sm btn-primary w-full' %>
+  <% else %>
+    <div class="tooltip w-full" data-tip="<%= t('configure_sms') %>">
+      <%= link_to t('send_sms'), settings_sms_index_path,
+            class: 'btn btn-sm btn-ghost w-full' %>
+    </div>
+  <% end %>
 </div>
