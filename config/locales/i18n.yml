@@ -465,6 +465,10 @@ en: &en
   rename: Rename
   home: Home
   templates_not_found: Templates not Found
+  documents: Documents
+  new_document: New Document
+  documents_not_found: No documents found
+  drafts: Drafts
   upload_new_document: Upload New Document
   uploading: Uploading
   expired: Expired

@@ -1,0 +1,67 @@
+<% if Docuseal.demo? %><%= render 'shared/demo_alert' %><% end %>
+<div class="flex justify-between items-center w-full mb-4">
+  <div class="flex items-center flex-grow min-w-0">
+    <% if @current_folder %>
+      <a href="<%= documents_path %>" class="mr-2 opacity-60 hover:opacity-100">
+        <%= svg_icon('arrow_left', class: 'w-6 h-6 stroke-2') %>
+      </a>
+      <h1 class="text-2xl truncate md:text-3xl sm:text-4xl font-bold">
+        <%= @current_folder.name %>
+      </h1>
+    <% else %>
+      <h1 class="text-2xl truncate md:text-3xl sm:text-4xl font-bold md:block <%= 'hidden' if params[:q].present? %>">
+        <%= t('documents') %>
+      </h1>
+    <% end %>
+  </div>
+  <div class="flex space-x-2">
+    <% if params[:q].present? || @pagy.pages > 1 || @template_folders.present? %>
+      <%= render 'shared/search_input' %>
+    <% end %>
+    <% if can?(:create, ::Template) %>
+      <span class="hidden sm:block">
+        <%= render 'templates/upload_button' %>
+      </span>
+      <%= link_to new_template_path, class: 'white-button !border gap-2', data: { turbo_frame: :modal } do %>
+        <%= svg_icon('plus', class: 'w-6 h-6 stroke-2') %>
+        <span class="hidden md:block"><%= t('new_document') %></span>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<% if @template_folders.present? %>
+  <div class="grid gap-4 md:grid-cols-3 mb-6">
+    <%= render partial: 'template_folders/folder', collection: @template_folders, as: :folder, locals: { documents_mode: true } %>
+  </div>
+<% end %>
+
+<% if @pagy.count.nil? || @pagy.count > 0 %>
+  <div class="space-y-4">
+    <%= render partial: 'templates/submission', collection: @submissions, locals: { with_template: true } %>
+  </div>
+  <% if @pagy.pages > 1 %>
+    <div class="mt-4">
+      <%= render 'shared/pagination', pagy: @pagy, items_name: 'submissions' %>
+    </div>
+  <% end %>
+<% end %>
+
+<% if @draft_templates.present? %>
+  <% if @submissions.present? || (@pagy.count.present? && @pagy.count > 0) %>
+    <h2 class="text-xl font-bold mt-8 mb-4"><%= t('drafts') %></h2>
+  <% end %>
+  <div class="grid gap-4 md:grid-cols-3">
+    <%= render partial: 'templates/template', collection: @draft_templates %>
+  </div>
+<% end %>
+
+<% if @submissions.blank? && @draft_templates.blank? && @template_folders.blank? %>
+  <% if params[:q].present? %>
+    <div class="text-center mt-16 text-3xl font-semibold">
+      <%= t('documents_not_found') %>
+    </div>
+  <% else %>
+    <%= render 'templates/dropzone' %>
+  <% end %>
+<% end %>
