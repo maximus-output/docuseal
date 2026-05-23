@@ -120,6 +120,70 @@
         </div>
       </div>
       <div
+        v-if="field.preferences.price && !field.preferences.formula && !('price_id' in field.preferences) && !('payment_link_id' in field.preferences)"
+        class="field-settings-payment-mode py-1.5 px-1 relative"
+        @click.stop
+      >
+        <select
+          v-model="field.preferences.payment_mode"
+          class="select select-bordered select-xs font-normal w-full max-w-xs !h-7 !outline-0"
+          @change="save"
+        >
+          <option value="blocking">{{ t('pay_before_submit') }}</option>
+          <option value="after_signing">{{ t('invoice_after_signing') }}</option>
+        </select>
+        <label
+          :style="{ backgroundColor: backgroundColor }"
+          class="absolute -top-1 left-2.5 px-1 h-4"
+          style="font-size: 8px"
+        >
+          {{ t('payment_mode') }}
+        </label>
+      </div>
+      <div
+        v-if="field.preferences.payment_mode === 'after_signing'"
+        class="field-settings-payment-terms py-1.5 px-1 relative"
+        @click.stop
+      >
+        <select
+          v-model="field.preferences.payment_terms"
+          class="select select-bordered select-xs font-normal w-full max-w-xs !h-7 !outline-0"
+          @change="save"
+        >
+          <option value="due_on_receipt">{{ t('due_on_receipt') }}</option>
+          <option value="net_x">{{ t('net_x_days') }}</option>
+        </select>
+        <label
+          :style="{ backgroundColor: backgroundColor }"
+          class="absolute -top-1 left-2.5 px-1 h-4"
+          style="font-size: 8px"
+        >
+          {{ t('payment_terms') }}
+        </label>
+      </div>
+      <div
+        v-if="field.preferences.payment_terms === 'net_x'"
+        class="field-settings-days-until-due py-1.5 px-1 relative"
+        @click.stop
+      >
+        <input
+          v-model.number="field.preferences.days_until_due"
+          type="number"
+          min="1"
+          max="365"
+          placeholder="30"
+          class="input input-bordered input-xs w-full max-w-xs h-7 !outline-0"
+          @blur="save"
+        >
+        <label
+          :style="{ backgroundColor: backgroundColor }"
+          class="absolute -top-1 left-2.5 px-1 h-4"
+          style="font-size: 8px"
+        >
+          {{ t('days_until_due') }}
+        </label>
+      </div>
+      <div
         v-if="!isConnected || isOauthSuccess"
         class="field-settings-stripe-connect py-1.5 px-1 relative"
         @click.stop

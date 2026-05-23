@@ -44,7 +44,8 @@ Rails.application.routes.draw do
       post :merge, on: :collection
       post :verify, on: :collection
     end
-    resources :stripe_payments, only: %i[show create]
+    resources :stripe_payments, only: %i[show create update]
+    resource :stripe_connect, only: %i[show]
     scope 'events' do
       resources :form_events, only: %i[index], path: 'form/:type'
       resources :submission_events, only: %i[index], path: 'submission/:type'

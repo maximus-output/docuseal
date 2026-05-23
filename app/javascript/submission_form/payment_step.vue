@@ -160,7 +160,7 @@ export default {
       this.$emit('submit')
     }
 
-    if (!this.sessionId) {
+    if (!this.sessionId && !this.modelValue) {
       this.postCheckout({ checkStatus: true })
     }
 
@@ -242,7 +242,13 @@ export default {
           return Promise.reject(new Error(data.message))
         }
 
-        const { url } = await resp.json()
+        const { url, id, non_blocking } = await resp.json()
+
+        if (non_blocking) {
+          this.$emit('update:model-value', id)
+          this.$emit('submit')
+          return
+        }
 
         const link = document.createElement('a')
 
