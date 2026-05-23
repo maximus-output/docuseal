@@ -24,5 +24,10 @@ class Ability
     can :manage, WebhookUrl, account_id: user.account_id
 
     can :manage, :mcp
+    can :manage, :saml_sso
+    can :manage, :bulk_send
+    can :manage, :countless
+    can :manage, :personalization_advanced
+    can :manage, :tenants
   end
 end
