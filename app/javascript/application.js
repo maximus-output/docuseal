@@ -62,6 +62,22 @@ document.addEventListener('turbo:before-cache', () => {
   window.flash?.remove()
 })
 
+window.toggleDocusealTheme = function () {
+  const t = document.documentElement.getAttribute('data-theme') === 'docuseal-dark' ? 'docuseal' : 'docuseal-dark'
+  localStorage.setItem('ds-theme', t)
+  document.documentElement.setAttribute('data-theme', t)
+  document.getElementById('theme-icon-moon')?.classList.toggle('hidden')
+  document.getElementById('theme-icon-sun')?.classList.toggle('hidden')
+}
+
+function syncThemeIcons () {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'docuseal-dark'
+  document.getElementById('theme-icon-moon')?.classList.toggle('hidden', isDark)
+  document.getElementById('theme-icon-sun')?.classList.toggle('hidden', !isDark)
+}
+
+document.addEventListener('turbo:load', syncThemeIcons)
+
 document.addEventListener('keyup', (e) => {
   if (e.code === 'Escape') {
     document.activeElement?.blur()

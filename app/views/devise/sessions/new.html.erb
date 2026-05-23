@@ -19,6 +19,17 @@
     </div>
   <% end %>
   <%= render 'omniauthable' %>
+  <% if !Docuseal.multitenant? %>
+    <% saml_config = EncryptedConfig.find_by(account: Account.first, key: EncryptedConfig::SAML_CONFIGS_KEY)&.value %>
+    <% if saml_config&.dig('idp_sso_target_url').present? %>
+      <div class="divider my-2">or</div>
+      <%= link_to saml_init_path,
+                  class: 'btn btn-outline w-full',
+                  data: { turbo: false } do %>
+        Sign in with SSO
+      <% end %>
+    <% end %>
+  <% end %>
   <%= render 'extra_links' %>
   <%= render 'devise/shared/links' %>
 </div>

@@ -17,8 +17,6 @@ class PersonalizationSettingsController < ApplicationController
 
   def show
     authorize!(:read, AccountConfig)
-
-    @stripe_config = EncryptedConfig.find_or_initialize_by(account: current_account, key: EncryptedConfig::STRIPE_CONFIGS_KEY)
   end
 
   def create

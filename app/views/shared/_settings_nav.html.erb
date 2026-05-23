@@ -82,6 +82,11 @@
             <%= link_to 'SSO', settings_sso_index_path, class: 'text-base hover:bg-base-300' %>
           </li>
         <% end %>
+        <% if !Docuseal.multitenant? && can?(:manage, current_account) && true_user == current_user %>
+          <li>
+            <%= link_to 'Stripe', settings_stripe_index_path, class: 'text-base hover:bg-base-300' %>
+          </li>
+        <% end %>
         <% if !Docuseal.multitenant? && can?(:read, McpToken) && can?(:manage, :mcp) %>
           <li>
             <%= link_to 'MCP', settings_mcp_index_path, class: 'text-base hover:bg-base-300' %>

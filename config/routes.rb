@@ -202,6 +202,7 @@ Rails.application.routes.draw do
                                     path: 'personalization/logo', controller: 'personalization_logo'
     resource :personalization_stripe, only: %i[create],
                                       path: 'personalization/stripe', controller: 'personalization_stripe'
+    resources :stripe, only: %i[index create], controller: 'stripe_settings'
     resources :webhooks, only: %i[index show new create update destroy], controller: 'webhook_settings' do
       post :resend
 

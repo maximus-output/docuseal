@@ -1,0 +1,49 @@
+<div class="flex flex-wrap space-y-4 md:flex-nowrap md:space-y-0">
+  <%= render 'shared/settings_nav' %>
+  <div class="flex-grow max-w-xl mx-auto">
+    <h1 class="text-4xl font-bold mb-4">Stripe</h1>
+    <% config_value = @config.value.is_a?(Hash) ? @config.value : {} %>
+    <% secret_configured = config_value['secret_key'].present? %>
+    <% publishable_configured = config_value['publishable_key'].present? %>
+    <%= form_with url: settings_stripe_index_path, method: :post, html: { class: 'space-y-4' } do |f| %>
+      <div class="form-control">
+        <%= label_tag :publishable_key, 'Publishable Key', class: 'label font-medium' %>
+        <%= password_field_tag :publishable_key, '',
+                               class: 'base-input w-full',
+                               placeholder: publishable_configured ? '••••••••••••••••••••••••' : 'pk_live_...',
+                               autocomplete: 'off' %>
+        <% if publishable_configured %>
+          <label class="label"><span class="label-text-alt text-success">&#10003; Configured</span></label>
+        <% end %>
+      </div>
+      <div class="form-control">
+        <%= label_tag :secret_key, 'Secret Key', class: 'label font-medium' %>
+        <%= password_field_tag :secret_key, '',
+                               class: 'base-input w-full',
+                               placeholder: secret_configured ? '••••••••••••••••••••••••' : 'sk_live_...',
+                               autocomplete: 'off' %>
+        <% if secret_configured %>
+          <label class="label"><span class="label-text-alt text-success">&#10003; Configured</span></label>
+        <% end %>
+        <label class="label">
+          <span class="label-text-alt text-base-content/60">
+            Only the secret key is required for payment processing via Checkout Sessions.
+            The publishable key is for direct Stripe Elements embedding.
+          </span>
+        </label>
+      </div>
+      <div>
+        <%= submit_tag t('save'), class: 'base-button' %>
+      </div>
+    <% end %>
+    <% if secret_configured %>
+      <div class="divider"></div>
+      <%= button_to 'Disconnect Stripe', settings_stripe_index_path,
+                    method: :post,
+                    params: { secret_key: '', publishable_key: '' },
+                    class: 'btn btn-sm btn-outline btn-error',
+                    data: { turbo_confirm: t('are_you_sure_') } %>
+    <% end %>
+  </div>
+  <div class="w-0 md:w-52"></div>
+</div>

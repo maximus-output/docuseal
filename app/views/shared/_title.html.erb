@@ -1,2 +1,7 @@
-<%= render 'shared/logo' %>
-<span>DocuSeal</span>
+<% account_logo = defined?(current_account) && current_account&.logo %>
+<% if account_logo&.attached? %>
+  <%= image_tag rails_blob_path(account_logo, disposition: 'inline'), class: 'h-8 max-h-8 object-contain', alt: 'Logo' %>
+<% else %>
+  <%= render 'shared/logo' %>
+  <span>DocuSeal</span>
+<% end %>
