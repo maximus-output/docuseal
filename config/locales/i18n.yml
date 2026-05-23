@@ -402,6 +402,8 @@ en: &en
   test: Test
   single_sign_on_with_saml_2_0: Single Sign On with SAML 2.0
   force_sso_disable_login_with_email_and_password: Force SSO (disable login with email and password)
+  service_provider_details: Service Provider Details
+  test_sso_login: Test SSO Login
   for_aws_s3_compatible_apis_like_minio: For AWS S3 compatible APIs like Minio.
   store_all_files_on_disk: Store all files on disk
   no_configs_are_needed_but_make_sure_your_disk_is_persistent: No configs are needed but make sure your disk is persistent
@@ -1456,6 +1458,8 @@ es: &es
   test: Probar
   single_sign_on_with_saml_2_0: Inicio de sesión único con SAML 2.0
   force_sso_disable_login_with_email_and_password: Forzar SSO (desactivar inicio de sesión con correo electrónico y contraseña)
+  service_provider_details: Detalles del proveedor de servicios
+  test_sso_login: Probar inicio de sesión SSO
   for_aws_s3_compatible_apis_like_minio: Para APIs compatibles con AWS S3, como Minio.
   store_all_files_on_disk: Almacenar todos los archivos en el disco
   no_configs_are_needed_but_make_sure_your_disk_is_persistent: No se necesitan configuraciones, pero asegúrate de que tu disco sea persistente
@@ -2507,6 +2511,8 @@ it: &it
   test: Test
   single_sign_on_with_saml_2_0: Accesso singolo con SAML 2.0
   force_sso_disable_login_with_email_and_password: "Forza SSO (disabilita l'accesso con email e password)"
+  service_provider_details: Dettagli del provider di servizi
+  test_sso_login: Test di accesso SSO
   for_aws_s3_compatible_apis_like_minio: Per API compatibili con AWS S3 come Minio.
   store_all_files_on_disk: Archivia tutti i file su disco
   no_configs_are_needed_but_make_sure_your_disk_is_persistent: Non sono necessarie configurazioni, ma assicurati che il tuo disco sia persistente
@@ -3558,6 +3564,8 @@ fr: &fr
   test: Tester
   single_sign_on_with_saml_2_0: Authentification unique (SSO) avec SAML 2.0
   force_sso_disable_login_with_email_and_password: Forcer le SSO (désactiver la connexion par e‑mail et mot de passe)
+  service_provider_details: Détails du fournisseur de services
+  test_sso_login: Tester la connexion SSO
   for_aws_s3_compatible_apis_like_minio: Pour les API compatibles AWS S3 comme Minio.
   store_all_files_on_disk: Stocker tous les fichiers sur disque
   no_configs_are_needed_but_make_sure_your_disk_is_persistent: Aucune configuration n’est nécessaire, mais assurez‑vous que votre disque est persistant
@@ -4606,6 +4614,8 @@ pt: &pt
   test: Testar
   single_sign_on_with_saml_2_0: Single Sign-On com SAML 2.0
   force_sso_disable_login_with_email_and_password: Forçar SSO (desativar login com e-mail e senha)
+  service_provider_details: Detalhes do provedor de serviços
+  test_sso_login: Testar login SSO
   for_aws_s3_compatible_apis_like_minio: Para APIs compatíveis com AWS S3, como Minio.
   store_all_files_on_disk: Armazenar todos os arquivos no disco
   no_configs_are_needed_but_make_sure_your_disk_is_persistent: Nenhuma configuração é necessária, mas certifique-se de que o disco seja persistente
@@ -5657,6 +5667,8 @@ de: &de
   test: Testen
   single_sign_on_with_saml_2_0: Single Sign-On mit SAML 2.0
   force_sso_disable_login_with_email_and_password: SSO erzwingen (Login mit E-Mail und Passwort deaktivieren)
+  service_provider_details: Dienstanbieter-Details
+  test_sso_login: SSO-Anmeldung testen
   for_aws_s3_compatible_apis_like_minio: Für AWS S3-kompatible APIs wie Minio.
   store_all_files_on_disk: Alle Dateien auf der Festplatte speichern
   no_configs_are_needed_but_make_sure_your_disk_is_persistent: Keine Konfigurationen erforderlich, aber stellen Sie sicher, dass Ihre Festplatte persistent ist
@@ -7113,6 +7125,8 @@ nl: &nl
   test: Test
   single_sign_on_with_saml_2_0: Single Sign-On met SAML 2.0
   force_sso_disable_login_with_email_and_password: SSO afdwingen (inloggen met e-mail en wachtwoord uitschakelen)
+  service_provider_details: Serviceproviderdetails
+  test_sso_login: SSO-aanmelding testen
   for_aws_s3_compatible_apis_like_minio: Voor AWS S3-compatibele API's zoals MinIO.
   store_all_files_on_disk: Alle bestanden op schijf opslaan
   no_configs_are_needed_but_make_sure_your_disk_is_persistent: Geen configuraties nodig, maar zorg ervoor dat uw schijf persistent is

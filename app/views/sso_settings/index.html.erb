@@ -4,7 +4,7 @@
     <h1 class="text-4xl font-bold mb-4">SAML SSO</h1>
     <% saml_config = @encrypted_config.value || {} %>
     <div class="mb-6 p-4 bg-base-200 rounded-lg text-sm space-y-1">
-      <p class="font-medium mb-2"><%= t('service_provider_details') %>:</p>
+      <p class="font-medium mb-2"><%= t('service_provider_details') %></p>
       <p><strong>Entity ID / Audience:</strong> <%= request.base_url %>/saml/metadata</p>
       <p><strong>ACS URL:</strong> <%= request.base_url %>/saml/acs</p>
     </div>
@@ -39,7 +39,7 @@
       <%= form_for account_config, url: account_configs_path, method: :post, html: { class: 'mt-4' } do |f| %>
         <%= f.hidden_field :key %>
         <div class="flex items-center justify-between">
-          <span><%= t('force_sso_login') %></span>
+          <span><%= t('force_sso_disable_login_with_email_and_password') %></span>
           <submit-form data-on="change">
             <%= f.check_box :value, class: 'toggle', checked: account_config.value == true %>
           </submit-form>

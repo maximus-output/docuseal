@@ -2,6 +2,8 @@
 
 class SamlSessionsController < ApplicationController
   skip_before_action :authenticate_user!
+  skip_before_action :verify_authenticity_token, only: :acs
+  skip_before_action :maybe_redirect_to_setup
   skip_authorization_check
 
   def init
@@ -51,7 +53,8 @@ class SamlSessionsController < ApplicationController
   private
 
   def load_saml_config
-    EncryptedConfig.find_by(key: 'saml_configs')&.value
+    account = Account.first
+    EncryptedConfig.find_by(account:, key: EncryptedConfig::SAML_CONFIGS_KEY)&.value
   end
 
   def build_saml_settings(saml_config)

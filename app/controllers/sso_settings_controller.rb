@@ -11,7 +11,7 @@ class SsoSettingsController < ApplicationController
     value = @encrypted_config.value || {}
     value['idp_sso_target_url'] = params[:idp_sso_target_url].to_s.strip
     value['idp_entity_id'] = params[:idp_entity_id].to_s.strip
-    value['idp_cert'] = params[:idp_cert].to_s.strip if params[:idp_cert].present?
+    value['idp_cert'] = params[:idp_cert].to_s.strip
 
     @encrypted_config.value = value
 
@@ -26,6 +26,6 @@ class SsoSettingsController < ApplicationController
 
   def load_encrypted_config
     @encrypted_config =
-      EncryptedConfig.find_or_initialize_by(account: current_account, key: 'saml_configs')
+      EncryptedConfig.find_or_initialize_by(account: current_account, key: EncryptedConfig::SAML_CONFIGS_KEY)
   end
 end
