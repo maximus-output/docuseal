@@ -26,46 +26,59 @@ class CheckAndSendRemindersJob
     AccountConfig.where(key: AccountConfig::SUBMITTER_REMINDERS).find_each do |config|
       next unless config.value.is_a?(Hash)
 
-      account = config.account
-      durations = [
-        config.value['first_duration'],
-        config.value['second_duration'],
-        config.value['third_duration']
-      ].compact.filter_map { |d| DURATION_MAP[d] }.sort
+      process_account_reminders(config)
+    end
+  end
 
-      next if durations.empty?
+  private
 
-      pending_submitters = Submitter
-        .where(account_id: account.id, completed_at: nil, declined_at: nil)
-        .where.not(email: [nil, ''])
-        .joins(:submission)
-        .where(submissions: { archived_at: nil })
-        .where.not(sent_at: nil)
+  def process_account_reminders(config)
+    durations = extract_durations(config.value)
+    return if durations.empty?
 
-      pending_submitters.find_each do |submitter|
-        next unless Accounts.can_send_emails?(account)
+    account = config.account
+    pending_submitters(account).find_each do |submitter|
+      next unless Accounts.can_send_emails?(account)
 
-        sent_at = submitter.sent_at
-        now = Time.current
+      check_and_send_for_submitter(submitter, durations)
+    end
+  end
 
-        durations.each do |duration|
-          target_time = sent_at + duration
-          window_start = target_time - 30.minutes
-          window_end = target_time + 30.minutes
+  def extract_durations(value)
+    [value['first_duration'], value['second_duration'], value['third_duration']]
+      .compact
+      .filter_map { |d| DURATION_MAP[d] }
+      .sort
+  end
 
-          next unless now.between?(window_start, window_end)
+  def pending_submitters(account)
+    Submitter
+      .where(account_id: account.id, completed_at: nil, declined_at: nil)
+      .where.not(email: [nil, ''])
+      .joins(:submission)
+      .where(submissions: { archived_at: nil })
+      .where.not(sent_at: nil)
+  end
 
-          already_sent = submitter.submission_events
-                                  .where(event_type: 'send_reminder_email')
-                                  .where(created_at: window_start..window_end)
-                                  .exists?
+  def check_and_send_for_submitter(submitter, durations)
+    sent_at = submitter.sent_at
+    now = Time.current
 
-          next if already_sent
+    durations.each do |duration|
+      target_time = sent_at + duration
+      window_start = target_time - 30.minutes
+      window_end = target_time + 30.minutes
 
-          SendReminderEmailJob.perform_async('submitter_id' => submitter.id)
-          break
-        end
-      end
+      next unless now.between?(window_start, window_end)
+
+      already_sent = submitter.submission_events
+                              .where(event_type: 'send_reminder_email')
+                              .exists?(created_at: window_start..window_end)
+
+      next if already_sent
+
+      SendReminderEmailJob.perform_async('submitter_id' => submitter.id)
+      break
     end
   end
 end

@@ -12,18 +12,19 @@
       <div class="form-control">
         <%= label_tag :idp_sso_target_url, 'IdP SSO URL', class: 'label font-medium' %>
         <%= text_field_tag :idp_sso_target_url, saml_config['idp_sso_target_url'],
-              class: 'base-input w-full', placeholder: 'https://your-idp.com/sso/saml' %>
+                           class: 'base-input w-full', placeholder: 'https://your-idp.com/sso/saml',
+                           autocomplete: 'off' %>
       </div>
       <div class="form-control">
         <%= label_tag :idp_entity_id, 'IdP Entity ID', class: 'label font-medium' %>
         <%= text_field_tag :idp_entity_id, saml_config['idp_entity_id'],
-              class: 'base-input w-full' %>
+                           class: 'base-input w-full', autocomplete: 'off' %>
       </div>
       <div class="form-control">
         <%= label_tag :idp_cert, 'IdP Certificate (X.509, PEM format)', class: 'label font-medium' %>
         <%= text_area_tag :idp_cert, saml_config['idp_cert'],
-              class: 'base-textarea w-full font-mono text-xs', rows: 8,
-              placeholder: "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----" %>
+                          class: 'base-textarea w-full font-mono text-xs', rows: 8,
+                          placeholder: "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----" %>
       </div>
       <div>
         <%= submit_tag t('save'), class: 'base-button' %>

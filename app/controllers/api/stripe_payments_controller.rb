@@ -42,9 +42,7 @@ module Api
       preferences = field['preferences'] || {}
       amount_cents = (preferences['price'].to_f * 100).to_i
 
-      if amount_cents <= 0
-        return render json: { error: 'Invalid payment amount' }, status: :unprocessable_content
-      end
+      return render json: { error: 'Invalid payment amount' }, status: :unprocessable_content if amount_cents <= 0
 
       currency = (preferences['currency'] || 'USD').downcase
       payment_mode = preferences['payment_mode'].presence || 'blocking'
@@ -79,20 +77,21 @@ module Api
     def create_checkout_session(field, submitter, stripe_key, amount_cents, currency)
       base_url = params[:referer].presence || request.base_url
       session = Stripe::Checkout::Session.create({
-        mode: 'payment',
-        success_url: "#{base_url}?stripe_session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: base_url,
-        customer_email: submitter.email.presence,
-        line_items: [{
-          quantity: 1,
-          price_data: {
-            currency:,
-            unit_amount: amount_cents,
-            product_data: { name: field['name'].presence || 'Payment' }
-          }
-        }],
-        metadata: { submitter_slug: submitter.slug, field_uuid: field['uuid'] }
-      }, { api_key: stripe_key })
+                                                   mode: 'payment',
+                                                   success_url: "#{base_url}?stripe_session_id={CHECKOUT_SESSION_ID}",
+                                                   cancel_url: base_url,
+                                                   customer_email: submitter.email.presence,
+                                                   line_items: [{
+                                                     quantity: 1,
+                                                     price_data: {
+                                                       currency:,
+                                                       unit_amount: amount_cents,
+                                                       product_data: { name: field['name'].presence || 'Payment' }
+                                                     }
+                                                   }],
+                                                   metadata: { submitter_slug: submitter.slug,
+                                                               field_uuid: field['uuid'] }
+                                                 }, { api_key: stripe_key })
 
       render json: { url: session.url, id: session.id }
     end
@@ -104,19 +103,19 @@ module Api
       customer = find_or_create_customer(submitter, stripe_key)
 
       invoice = Stripe::Invoice.create({
-        customer: customer.id,
-        collection_method: 'send_invoice',
-        days_until_due: payment_terms == 'net_x' ? days_until_due : 0,
-        metadata: { submitter_slug: submitter.slug, field_uuid: field['uuid'] }
-      }, { api_key: stripe_key })
+                                         customer: customer.id,
+                                         collection_method: 'send_invoice',
+                                         days_until_due: payment_terms == 'net_x' ? days_until_due : 0,
+                                         metadata: { submitter_slug: submitter.slug, field_uuid: field['uuid'] }
+                                       }, { api_key: stripe_key })
 
       Stripe::InvoiceItem.create({
-        customer: customer.id,
-        invoice: invoice.id,
-        amount: amount_cents,
-        currency:,
-        description: field['name'].presence || 'Payment'
-      }, { api_key: stripe_key })
+                                   customer: customer.id,
+                                   invoice: invoice.id,
+                                   amount: amount_cents,
+                                   currency:,
+                                   description: field['name'].presence || 'Payment'
+                                 }, { api_key: stripe_key })
 
       invoice = Stripe::Invoice.finalize_invoice(invoice.id, {}, { api_key: stripe_key })
       Stripe::Invoice.send_invoice(invoice.id, {}, { api_key: stripe_key })

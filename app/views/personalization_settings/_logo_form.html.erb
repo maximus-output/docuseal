@@ -4,17 +4,17 @@
     <div class="flex items-center gap-4">
       <%= image_tag rails_blob_path(logo_attachment, disposition: 'inline'), class: 'h-16 max-w-xs object-contain rounded border border-base-300', alt: 'Company logo' %>
       <%= button_to t('remove'), settings_personalization_logo_path, method: :delete,
-            class: 'btn btn-sm btn-outline btn-error',
-            data: { turbo_confirm: t('are_you_sure_') } %>
+                                                                     class: 'btn btn-sm btn-outline btn-error',
+                                                                     data: { turbo_confirm: t('are_you_sure_') } %>
     </div>
   <% end %>
   <%= form_with url: settings_personalization_logo_path, method: :post,
-        html: { enctype: 'multipart/form-data', class: 'space-y-2' } do |f| %>
+                html: { enctype: 'multipart/form-data', class: 'space-y-2' } do |f| %>
     <div class="form-control">
       <%= f.label :logo, logo_attachment.attached? ? t('replace_logo') : t('upload_logo'),
-            class: 'label font-medium' %>
+                  class: 'label font-medium' %>
       <%= f.file_field :logo, accept: 'image/png,image/jpeg,image/gif,image/svg+xml',
-            class: 'file-input file-input-bordered w-full max-w-xs' %>
+                              class: 'file-input file-input-bordered w-full max-w-xs' %>
     </div>
     <div>
       <%= f.submit t('save'), class: 'base-button' %>

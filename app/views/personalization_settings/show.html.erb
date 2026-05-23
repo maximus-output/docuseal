@@ -30,8 +30,9 @@
       <div class="form-control">
         <%= label_tag :secret_key, 'Stripe Secret Key', class: 'label font-medium' %>
         <%= password_field_tag :secret_key, '',
-              class: 'base-input w-full',
-              placeholder: stripe_configured ? '••••••••••••••••••••••••' : 'sk_live_...' %>
+                               class: 'base-input w-full',
+                               placeholder: stripe_configured ? '••••••••••••••••••••••••' : 'sk_live_...',
+                               autocomplete: 'off' %>
         <% if stripe_configured %>
           <label class="label"><span class="label-text-alt text-success">✓ Stripe key is configured</span></label>
         <% end %>

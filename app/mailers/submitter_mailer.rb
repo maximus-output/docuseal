@@ -50,7 +50,7 @@ class SubmitterMailer < ApplicationMailer
     @submitter = submitter
 
     @email_config = AccountConfigs.find_for_account(@current_account,
-                                                     AccountConfig::SUBMITTER_INVITATION_REMINDER_EMAIL_KEY)
+                                                    AccountConfig::SUBMITTER_INVITATION_REMINDER_EMAIL_KEY)
     @body = fetch_config_email_body(@email_config, @submitter)
 
     assign_message_metadata('submitter_invitation', @submitter)

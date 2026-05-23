@@ -50,30 +50,43 @@ class SubmissionsBulkController < ApplicationController
   def extract_emails_from_spreadsheet(file)
     return [] if file.blank?
 
-    content = file.read
-    rows =
-      if file.original_filename.end_with?('.csv')
-        require 'csv'
-        CSV.parse(content, headers: true)
-      else
-        require 'rubyXL'
-        workbook = RubyXL::Parser.parse_buffer(StringIO.new(content))
-        sheet = workbook.worksheets.first
-        headers = sheet[0].cells.map { |c| c&.value.to_s.downcase.strip }
-        sheet.drop(1).filter_map do |row|
-          next unless row
-
-          headers.zip(row.cells.map { |c| c&.value.to_s }).to_h
-        end
-      end
-
-    email_key = rows.first&.headers&.find { |h| h.to_s.match?(/email/i) } if rows.respond_to?(:first) && rows.first.respond_to?(:headers)
-    email_key ||= rows.first&.keys&.find { |k| k.to_s.match?(/email/i) }
+    rows = parse_rows(file)
+    email_key = find_email_key(rows)
 
     return [] if email_key.blank?
 
-    rows.filter_map { |row| row[email_key].to_s.strip.presence }.select do |email|
-      email.match?(User::EMAIL_REGEXP)
-    end.uniq
+    rows.filter_map { |row| row[email_key].to_s.strip.presence }.grep(User::EMAIL_REGEXP).uniq
+  end
+
+  def parse_rows(file)
+    content = file.read
+
+    if file.original_filename.end_with?('.csv')
+      require 'csv'
+      CSV.parse(content, headers: true)
+    else
+      parse_xlsx(content)
+    end
+  end
+
+  def parse_xlsx(content)
+    require 'rubyXL'
+    workbook = RubyXL::Parser.parse_buffer(StringIO.new(content))
+    sheet = workbook.worksheets.first
+    headers = sheet[0].cells.map { |c| c&.value.to_s.downcase.strip }
+    sheet.drop(1).filter_map do |row|
+      next unless row
+
+      headers.zip(row.cells.map { |c| c&.value.to_s }).to_h
+    end
+  end
+
+  def find_email_key(rows)
+    if rows.respond_to?(:first) && rows.first.respond_to?(:headers)
+      key = rows.first&.headers&.find { |h| h.to_s.match?(/email/i) }
+      return key if key
+    end
+
+    rows.first&.keys&.find { |k| k.to_s.match?(/email/i) }
   end
 end

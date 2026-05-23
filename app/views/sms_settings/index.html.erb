@@ -6,23 +6,26 @@
     <%= form_with url: settings_sms_index_path, method: :post, html: { class: 'space-y-4' } do |f| %>
       <div class="form-control">
         <%= label_tag :provider, 'SMS Provider', class: 'label font-medium' %>
-        <%= select_tag :provider, options_for_select([['Twilio', 'twilio'], ['Vonage', 'vonage']], sms_config['provider']),
-              class: 'base-select', include_blank: 'Select provider' %>
+        <%= select_tag :provider, options_for_select([%w[Twilio twilio], %w[Vonage vonage]], sms_config['provider']),
+                       class: 'base-select', include_blank: 'Select provider' %>
       </div>
       <div class="form-control">
         <%= label_tag :account_sid, 'Account SID / API Key', class: 'label font-medium' %>
         <%= text_field_tag :account_sid, sms_config['account_sid'],
-              class: 'base-input w-full', placeholder: 'ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' %>
+                           class: 'base-input w-full', placeholder: 'ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+                           autocomplete: 'off' %>
       </div>
       <div class="form-control">
         <%= label_tag :auth_token, 'Auth Token / API Secret', class: 'label font-medium' %>
         <%= password_field_tag :auth_token, '',
-              class: 'base-input w-full', placeholder: '••••••••' %>
+                               class: 'base-input w-full', placeholder: '••••••••',
+                               autocomplete: 'off' %>
       </div>
       <div class="form-control">
         <%= label_tag :from_number, 'From Phone Number', class: 'label font-medium' %>
         <%= text_field_tag :from_number, sms_config['from_number'],
-              class: 'base-input w-full', placeholder: '+1234567890' %>
+                           class: 'base-input w-full', placeholder: '+1234567890',
+                           autocomplete: 'off' %>
       </div>
       <div>
         <%= submit_tag t('save'), class: 'base-button' %>

@@ -15,7 +15,6 @@ gem 'csv', require: false
 gem 'csv-safe', require: false
 gem 'devise'
 gem 'devise-two-factor'
-gem 'ruby-saml'
 gem 'dotenv', require: false
 gem 'email_typo'
 gem 'faraday'
@@ -38,14 +37,15 @@ gem 'rails-i18n'
 gem 'rotp'
 gem 'rouge', require: false
 gem 'rqrcode', require: false
+gem 'ruby-saml'
 gem 'ruby-vips'
 gem 'rubyXL', require: false
 gem 'shakapacker'
 gem 'sidekiq'
 gem 'sidekiq-cron'
-gem 'stripe'
 gem 'sqlite3', require: false
 gem 'strip_attributes'
+gem 'stripe'
 gem 'trilogy', require: false
 gem 'turbo-rails'
 gem 'twitter_cldr', require: false
