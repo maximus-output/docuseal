@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       post :merge, on: :collection
       post :verify, on: :collection
     end
+    resources :stripe_payments, only: %i[show create]
     scope 'events' do
       resources :form_events, only: %i[index], path: 'form/:type'
       resources :submission_events, only: %i[index], path: 'submission/:type'
@@ -198,6 +199,8 @@ Rails.application.routes.draw do
     resource :personalization, only: %i[show create], controller: 'personalization_settings'
     resource :personalization_logo, only: %i[create destroy],
              path: 'personalization/logo', controller: 'personalization_logo'
+    resource :personalization_stripe, only: %i[create],
+             path: 'personalization/stripe', controller: 'personalization_stripe'
     resources :webhooks, only: %i[index show new create update destroy], controller: 'webhook_settings' do
       post :resend
 

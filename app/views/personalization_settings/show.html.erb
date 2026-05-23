@@ -22,6 +22,25 @@
       <%= render 'form_policy_links_form' %>
     </div>
     <%= render 'form_customization_settings' %>
+    <p class="text-4xl font-bold mb-4 mt-8">
+      Stripe Payments
+    </p>
+    <% stripe_config = EncryptedConfig.find_or_initialize_by(account: current_account, key: 'stripe_configs') %>
+    <% stripe_configured = stripe_config.persisted? && stripe_config.value&.dig('secret_key').present? %>
+    <%= form_with url: settings_personalization_stripe_path, method: :post, html: { class: 'space-y-4' } do |f| %>
+      <div class="form-control">
+        <%= label_tag :secret_key, 'Stripe Secret Key', class: 'label font-medium' %>
+        <%= password_field_tag :secret_key, '',
+              class: 'base-input w-full',
+              placeholder: stripe_configured ? '••••••••••••••••••••••••' : 'sk_live_...' %>
+        <% if stripe_configured %>
+          <label class="label"><span class="label-text-alt text-success">✓ Stripe key is configured</span></label>
+        <% end %>
+      </div>
+      <div>
+        <%= submit_tag t('save'), class: 'base-button' %>
+      </div>
+    <% end %>
   </div>
   <div class="w-0 md:w-52"></div>
 </div>
