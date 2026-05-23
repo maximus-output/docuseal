@@ -433,6 +433,7 @@ en: &en
   sms_not_configured: SMS not Configured
   configure_sms_settings_in_order_to_send_text_messages_: 'Configure SMS settings in order to send text messages:'
   go_to_sms_settings: Go to SMS settings
+  configure_sms: Configure SMS
   back_to_active: Back to Active
   submissions: Submissions
   templates: Templates
@@ -1486,6 +1487,7 @@ es: &es
   sms_not_configured: SMS no configurado
   configure_sms_settings_in_order_to_send_text_messages_: 'Configura los ajustes de SMS para enviar mensajes de texto:'
   go_to_sms_settings: Ir a la configuración de SMS
+  configure_sms: Configurar SMS
   back_to_active: Volver a activo
   submissions: Envíos
   templates: Plantillas
@@ -2536,6 +2538,7 @@ it: &it
   sms_not_configured: SMS non configurato
   configure_sms_settings_in_order_to_send_text_messages_: 'Configura le impostazioni SMS per inviare messaggi di testo:'
   go_to_sms_settings: Vai alle impostazioni SMS
+  configure_sms: Configura SMS
   back_to_active: Torna attivo
   submissions: Invii
   templates: Modelli
@@ -3586,6 +3589,7 @@ fr: &fr
   sms_not_configured: SMS non configuré
   configure_sms_settings_in_order_to_send_text_messages_: 'Configurez les paramètres SMS pour envoyer des messages texte :'
   go_to_sms_settings: Accéder aux paramètres SMS
+  configure_sms: Configurer SMS
   back_to_active: Retour aux actifs
   submissions: Soumissions
   templates: Modèles
@@ -4633,6 +4637,7 @@ pt: &pt
   sms_not_configured: SMS não configurado
   configure_sms_settings_in_order_to_send_text_messages_: 'Configure as configurações de SMS para enviar mensagens de texto:'
   go_to_sms_settings: Ir para configurações de SMS
+  configure_sms: Configurar SMS
   back_to_active: Voltar para ativo
   submissions: Submissões
   templates: Modelos
@@ -5683,6 +5688,7 @@ de: &de
   sms_not_configured: SMS nicht konfiguriert
   configure_sms_settings_in_order_to_send_text_messages_: 'Konfigurieren Sie die SMS-Einstellungen, um Textnachrichten zu senden:'
   go_to_sms_settings: Zu den SMS-Einstellungen
+  configure_sms: SMS konfigurieren
   back_to_active: Zurück zu Aktiv
   submissions: Einreichungen
   templates: Vorlagen
@@ -7138,6 +7144,7 @@ nl: &nl
   sms_not_configured: SMS niet geconfigureerd
   configure_sms_settings_in_order_to_send_text_messages_: 'Configureer de SMS-instellingen om tekstberichten te kunnen verzenden:'
   go_to_sms_settings: Ga naar SMS-instellingen
+  configure_sms: SMS configureren
   back_to_active: Terug naar Actief
   submissions: Inzendingen
   templates: Sjablonen

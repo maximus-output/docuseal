@@ -1,5 +1,5 @@
 <div class="form-control mt-2">
-  <% sms_configured = EncryptedConfig.exists?(account: current_account, key: 'sms_configs') %>
+  <% sms_configured = EncryptedConfig.exists?(account: current_account, key: EncryptedConfig::SMS_CONFIGS_KEY) %>
   <% if sms_configured %>
     <label class="flex items-center gap-2 cursor-pointer">
       <%= check_box_tag 'send_sms', '1', false, class: 'checkbox' %>

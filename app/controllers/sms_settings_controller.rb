@@ -3,7 +3,7 @@
 class SmsSettingsController < ApplicationController
   before_action :load_encrypted_config
   authorize_resource :encrypted_config, only: :index
-  authorize_resource :encrypted_config, parent: false, except: :index
+  authorize_resource :encrypted_config, parent: false, only: :create
 
   def index; end
 
@@ -27,6 +27,6 @@ class SmsSettingsController < ApplicationController
 
   def load_encrypted_config
     @encrypted_config =
-      EncryptedConfig.find_or_initialize_by(account: current_account, key: 'sms_configs')
+      EncryptedConfig.find_or_initialize_by(account: current_account, key: EncryptedConfig::SMS_CONFIGS_KEY)
   end
 end

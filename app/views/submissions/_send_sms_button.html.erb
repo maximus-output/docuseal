@@ -1,5 +1,5 @@
 <div class="mt-2 mb-1">
-  <% sms_configured = EncryptedConfig.exists?(account: current_account, key: 'sms_configs') %>
+  <% sms_configured = EncryptedConfig.exists?(account: current_account, key: EncryptedConfig::SMS_CONFIGS_KEY) %>
   <% if sms_configured %>
     <%= button_to submitter.sent_at? ? t('re_send_sms') : t('send_sms'),
           submitter_path(submitter),

@@ -9,8 +9,10 @@ class SendSubmitterInvitationSmsJob
     return unless submitter
     return if submitter.phone.blank?
     return if submitter.completed_at?
+    return if submitter.declined_at?
+    return if submitter.submission.archived_at?
 
-    sms_config = EncryptedConfig.find_by(account: submitter.account, key: 'sms_configs')&.value
+    sms_config = EncryptedConfig.find_by(account: submitter.account, key: EncryptedConfig::SMS_CONFIGS_KEY)&.value
 
     return if sms_config.blank?
 
@@ -22,6 +24,8 @@ class SendSubmitterInvitationSmsJob
       account_id: submitter.account_id,
       data: {}
     )
+
+    submitter.update_columns(sent_at: Time.current) if submitter.sent_at.nil?
   end
 
   private
@@ -56,6 +60,8 @@ class SendSubmitterInvitationSmsJob
     uri = URI("https://api.twilio.com/2010-04-01/Accounts/#{config['account_sid']}/Messages.json")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
+    http.open_timeout = 10
+    http.read_timeout = 15
 
     request = Net::HTTP::Post.new(uri)
     request.basic_auth(config['account_sid'], config['auth_token'])
@@ -72,6 +78,8 @@ class SendSubmitterInvitationSmsJob
     uri = URI('https://rest.nexmo.com/sms/json')
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
+    http.open_timeout = 10
+    http.read_timeout = 15
 
     request = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
     request.body = {
@@ -83,6 +91,8 @@ class SendSubmitterInvitationSmsJob
     }.to_json
 
     response = http.request(request)
-    raise "Vonage error #{response.code}: #{response.body}" unless response.is_a?(Net::HTTPSuccess)
+    parsed = JSON.parse(response.body)
+    status = parsed.dig('messages', 0, 'status')
+    raise "Vonage error #{status}: #{parsed.dig('messages', 0, 'error-text')}" unless status == '0'
   end
 end
