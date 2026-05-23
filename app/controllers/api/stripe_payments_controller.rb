@@ -8,8 +8,7 @@ module Api
       stripe_key = load_stripe_key
       return render json: { error: 'Stripe not configured' }, status: :unprocessable_content unless stripe_key
 
-      Stripe.api_key = stripe_key
-      session = Stripe::Checkout::Session.retrieve(params[:id])
+      session = Stripe::Checkout::Session.retrieve(params[:id], { api_key: stripe_key })
 
       render json: {
         id: session.id,
@@ -24,7 +23,9 @@ module Api
       stripe_key = load_stripe_key
       return render json: { error: 'Stripe not configured' }, status: :unprocessable_content unless stripe_key
 
-      submitter = Submitter.find_by(slug: params[:submitter_slug])
+      return render json: { error: 'success_url is required' }, status: :unprocessable_content if params[:success_url].blank?
+
+      submitter = current_account.submitters.find_by(slug: params[:submitter_slug])
       return render json: { error: 'Not found' }, status: :not_found unless submitter
 
       authorize!(:manage, submitter)
@@ -32,10 +33,12 @@ module Api
       field = submitter.submission.template.fields.find { |f| f['uuid'] == params[:field_uuid] }
       return render json: { error: 'Field not found' }, status: :not_found unless field
 
-      Stripe.api_key = stripe_key
-
       session_params = build_session_params(field, submitter, params[:success_url])
-      session = Stripe::Checkout::Session.create(session_params)
+      if session_params[:line_items].first[:price_data][:unit_amount] <= 0
+        return render json: { error: 'Invalid payment amount' }, status: :unprocessable_content
+      end
+
+      session = Stripe::Checkout::Session.create(session_params.merge(api_key: stripe_key))
 
       render json: { url: session.url, id: session.id }
     rescue Stripe::StripeError => e
@@ -45,7 +48,7 @@ module Api
     private
 
     def load_stripe_key
-      EncryptedConfig.find_by(account: current_account, key: 'stripe_configs')&.value&.dig('secret_key')
+      EncryptedConfig.find_by(account: current_account, key: EncryptedConfig::STRIPE_CONFIGS_KEY)&.value&.dig('secret_key')
     end
 
     def build_session_params(field, submitter, success_url)
