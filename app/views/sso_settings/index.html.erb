@@ -2,7 +2,50 @@
   <%= render 'shared/settings_nav' %>
   <div class="flex-grow max-w-xl mx-auto">
     <h1 class="text-4xl font-bold mb-4">SAML SSO</h1>
-    <%= render 'placeholder' %>
+    <% saml_config = @encrypted_config.value || {} %>
+    <div class="mb-6 p-4 bg-base-200 rounded-lg text-sm space-y-1">
+      <p class="font-medium mb-2"><%= t('service_provider_details') %>:</p>
+      <p><strong>Entity ID / Audience:</strong> <%= request.base_url %>/saml/metadata</p>
+      <p><strong>ACS URL:</strong> <%= request.base_url %>/saml/acs</p>
+    </div>
+    <%= form_with url: settings_sso_index_path, method: :post, html: { class: 'space-y-4' } do |f| %>
+      <div class="form-control">
+        <%= label_tag :idp_sso_target_url, 'IdP SSO URL', class: 'label font-medium' %>
+        <%= text_field_tag :idp_sso_target_url, saml_config['idp_sso_target_url'],
+              class: 'base-input w-full', placeholder: 'https://your-idp.com/sso/saml' %>
+      </div>
+      <div class="form-control">
+        <%= label_tag :idp_entity_id, 'IdP Entity ID', class: 'label font-medium' %>
+        <%= text_field_tag :idp_entity_id, saml_config['idp_entity_id'],
+              class: 'base-input w-full' %>
+      </div>
+      <div class="form-control">
+        <%= label_tag :idp_cert, 'IdP Certificate (X.509, PEM format)', class: 'label font-medium' %>
+        <%= text_area_tag :idp_cert, saml_config['idp_cert'],
+              class: 'base-textarea w-full font-mono text-xs', rows: 8,
+              placeholder: "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----" %>
+      </div>
+      <div>
+        <%= submit_tag t('save'), class: 'base-button' %>
+      </div>
+    <% end %>
+    <% if saml_config['idp_sso_target_url'].present? %>
+      <div class="mt-6 divider"></div>
+      <div class="flex items-center justify-between">
+        <p class="font-medium"><%= t('test_sso_login') %></p>
+        <%= link_to 'Test SSO →', saml_init_path, class: 'btn btn-outline btn-sm', data: { turbo: false } %>
+      </div>
+      <% account_config = AccountConfig.find_or_initialize_by(account: current_account, key: AccountConfig::FORCE_SSO_AUTH_KEY) %>
+      <%= form_for account_config, url: account_configs_path, method: :post, html: { class: 'mt-4' } do |f| %>
+        <%= f.hidden_field :key %>
+        <div class="flex items-center justify-between">
+          <span><%= t('force_sso_login') %></span>
+          <submit-form data-on="change">
+            <%= f.check_box :value, class: 'toggle', checked: account_config.value == true %>
+          </submit-form>
+        </div>
+      <% end %>
+    <% end %>
   </div>
   <div class="w-0 md:w-52"></div>
 </div>

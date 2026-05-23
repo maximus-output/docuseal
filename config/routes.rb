@@ -187,7 +187,7 @@ Rails.application.routes.draw do
       resource :reveal_access_token, only: %i[show create], controller: 'reveal_access_token'
     end
     resources :email, only: %i[index create], controller: 'email_smtp_settings'
-    resources :sso, only: %i[index], controller: 'sso_settings'
+    resources :sso, only: %i[index create], controller: 'sso_settings'
     resources :notifications, only: %i[index create], controller: 'notifications_settings'
     resource :esign, only: %i[show create new update destroy], controller: 'esign_settings'
     resources :users, only: %i[index]
@@ -215,6 +215,10 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get '/saml/init', to: 'saml_sessions#init', as: :saml_init
+  post '/saml/acs', to: 'saml_sessions#acs', as: :saml_acs
+  get '/saml/metadata', to: 'saml_sessions#metadata', as: :saml_metadata
 
   match '/mcp', to: 'mcp#call', via: %i[get post]
 
