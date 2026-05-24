@@ -31,6 +31,7 @@
               <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
             </svg>
           </button>
+          <%= link_to t('documents'), documents_path, class: 'hidden md:inline-flex font-medium text-lg' %>
           <%= link_to t('settings'), settings_profile_index_path, class: 'hidden md:inline-flex font-medium text-lg', id: 'account_settings_button' %>
         </div>
       <% end %>
