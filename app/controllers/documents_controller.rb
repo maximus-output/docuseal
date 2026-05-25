@@ -24,11 +24,10 @@ class DocumentsController < ApplicationController
   def load_folders
     if @current_folder
       @template_folders = @current_folder.subfolders
-                                         .where(id: Template.accessible_by(current_ability).active.select(:folder_id))
+                                         .where(id: @templates.active.select(:folder_id))
     else
-      all_templates = Template.accessible_by(current_ability)
       base = TemplateFolder.accessible_by(current_ability).where(parent_folder_id: nil)
-      @template_folders = TemplateFolders.filter_active_folders(base, all_templates)
+      @template_folders = TemplateFolders.filter_active_folders(base, @templates)
     end
 
     @template_folders = TemplateFolders.search(@template_folders, params[:q])
@@ -53,8 +52,9 @@ class DocumentsController < ApplicationController
 
   def load_draft_templates
     folder_id = @current_folder&.id || current_account.default_template_folder.id
+    submitted_ids = Submission.where(account_id: current_account.id).where.not(template_id: nil).select(:template_id)
     rel = @templates.active
-                    .where.missing(:submissions)
+                    .where.not(id: submitted_ids)
                     .where(folder_id:)
                     .preload(:author, :template_accesses)
 
